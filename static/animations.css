@@ -1,0 +1,110 @@
+/* Leaf background animation */
+@keyframes leafWallpaper {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 200% 200%;
+    }
+}
+
+.background-animation .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/Images/leaf-pattern.png') repeat;
+    opacity: 0.05;
+    animation: leafWallpaper 120s linear infinite;
+    z-index: -1;
+}
+
+/* Slide-up + fade-in for new cards */
+@keyframes slideUpFadeIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.slide-up-fade-in {
+    animation: slideUpFadeIn 0.5s ease-out forwards;
+}
+
+/* Grow-pulse for plants and flowers */
+@keyframes growPulse {
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+}
+
+.grow-pulse {
+    animation: growPulse 1s ease-in-out;
+}
+
+/* Celebrate bounce for big goals */
+@keyframes celebrate {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.4) rotate(15deg);
+        filter: brightness(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+.celebrate {
+    animation: celebrate 1.2s ease-out;
+}
+
+/* Sprout appear animation */
+@keyframes appear {
+    from {
+        transform: translateY(20px) scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.sprout-appear {
+    animation: appear 0.8s ease-out forwards;
+}
+
+/* Bloom animation for pathway nodes */
+@keyframes bloom {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.bloom {
+    animation: bloom 0.8s ease-out forwards;
+}
