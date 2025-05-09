@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenhouse | Garden of Growth</title>
+
+    <!-- Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Center the main content within the greenhouse main section */
+        .greenhouse-main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .greenhouse-content {
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .group-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .shared-garden, .group-feed {
+            margin-top: 1rem;
+        }
+
+            .shared-garden h3, .group-feed h3 {
+                text-align: center;
+            }
+    </style>
+</head>
+<body data-current-user-id="{{ current_user.id or '' }}">
+
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">Greenhouse</h1>
+            <div class="level-badge">Groups</div>
+        </div>
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link"><i class="fas fa-home"></i> My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link"><i class="fas fa-book"></i> Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link active"><i class="fas fa-users"></i> Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link"><i class="fas fa-map-marked-alt"></i> Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="greenhouse-container main-container">
+        <aside class="greenhouse-sidebar">
+            <h3><i class="fas fa-leaf"></i> My Groups <span id="group-count"></span></h3>
+            <div id="group-list" class="group-list">
+                <!-- Group list dynamically loaded -->
+            </div>
+            <button class="action-button create-group-button"><i class="fas fa-plus"></i> Create New Group</button>
+        </aside>
+
+        <section class="greenhouse-main">
+            <div class="greenhouse-content">
+                <!-- Group Header / Stats -->
+                <div id="group-header" class="group-header">
+                    <!-- Group details loaded dynamically -->
+                </div>
+                <!-- Shared Garden for the selected group -->
+                <div class="shared-garden">
+                    <h3><i class="fas fa-tree"></i> Shared Garden</h3>
+                    <div id="shared-garden">
+                        <!-- Group's garden state rendered in real time -->
+                    </div>
+                </div>
+                <!-- Recent Activity Feed -->
+                <div class="group-feed">
+                    <h3><i class="fas fa-comments"></i> Recent Activity</h3>
+                    <div id="activity-feed">
+                        <!-- Group's recent reflections or goals appear here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Group Creation Modal -->
+        <div id="group-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3>Create New Group</h3>
+                <form id="group-form">
+                    <div class="form-group">
+                        <label for="group-name">Group Name</label>
+                        <input type="text" id="group-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="group-description">Description</label>
+                        <textarea id="group-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-name">Select Class</label>
+                        <select id="class-name" required>
+                            <option value="">-- Select Class --</option>
+                            <option value="Biology 101">Biology 101</option>
+                            <option value="Math 101">Math 101</option>
+                            <option value="History 101">History 101</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Group Members</label>
+                        <div id="member-list">
+                            <!-- Dynamically loaded members -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="action-button" type="submit"><i class="fas fa-check"></i> Create Group</button>
+                        <button class="action-button" type="button" id="cancel-group-button"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- bootstrap currentUserId in JS -->
+    <script>
+        (() => {
+            const id = document.body.dataset.currentUserId;
+            window.currentUserId = id ? Number(id) : null;
+        })();
+    </script>
+
+    <!-- Page behavior -->
+    <script src="{{ url_for('static', filename='js/greenhouse.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

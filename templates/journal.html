@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal | Garden of Growth</title>
+
+    <!-- Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Baloo+2:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body data-current-user-id="{{ current_user.id or '' }}">
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">Journal</h1>
+            <div class="level-badge">New!</div>
+        </div>
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link"><i class="fas fa-home"></i> My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link active"><i class="fas fa-book"></i> Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link"><i class="fas fa-users"></i> Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link"><i class="fas fa-map-marked-alt"></i> Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="journal-container main-container">
+        <!-- Tab Navigation for Self / Group Reflections -->
+        <div class="journal-tabs tabs">
+            <button type="button" class="tab-button active" data-tab="self">Self Reflection</button>
+            <button type="button" class="tab-button" data-tab="group">Group Reflection</button>
+        </div>
+        <!-- Self Reflection Tab -->
+        <div id="self-tab" class="tab-content active">
+            <div class="reflection-form">
+                <h3><i class="fas fa-seedling"></i> Plant Your Thoughts</h3>
+                <div class="daily-prompt">
+                    <p>Today's Prompt: <span id="daily-prompt-text">{{ prompt or 'What challenges did you overcome today?' }}</span></p>
+                </div>
+                <textarea class="reflection-input" placeholder="Write your reflection here..." id="reflection-input-self"></textarea>
+                <div class="form-options">
+                    <div class="display-option">
+                        <label>Display As:</label>
+                        <select id="display-mode-self" title="Display mode for self reflection">
+                            <option value="named">My Name</option>
+                            <option value="pseudonym">Pseudonym</option>
+                            <option value="anonymous">Anonymous</option>
+                        </select>
+                        <input type="text" id="pseudonym-input-self" placeholder="Choose a pseudonym" style="display: none;">
+                    </div>
+                    <div class="tags-option">
+                        <label>Tags:</label>
+                        <div class="tags-container" id="tags-container-self">
+                            <input type="text" id="tag-input-self" placeholder="Add tag and press Enter">
+                        </div>
+                        <div class="selected-tags" id="selected-tags-self"></div>
+                    </div>
+                </div>
+                <div class="feedback-message" id="feedback-message-self"></div>
+                <button type="button" class="submit-button">
+                    <i class="fas fa-seedling"></i> Plant Reflection
+                </button>
+            </div>
+            <div class="reflection-feed">
+                <h3><i class="fas fa-history"></i> Your Recent Reflections</h3>
+                <!-- Self reflection cards loaded dynamically -->
+            </div>
+        </div>
+        <!-- Group Reflection Tab -->
+        <div id="group-tab" class="tab-content">
+            <div class="group-selector">
+                <label for="group-select">Select Group:</label>
+                <select id="group-select">
+                    <option value="">-- Choose a Group --</option>
+                    <!-- Options loaded dynamically -->
+                </select>
+            </div>
+            <div class="reflection-form">
+                <h3><i class="fas fa-seedling"></i> Plant Your Group Reflection</h3>
+                <div class="daily-prompt">
+                    <p>Today's Prompt: <span id="daily-prompt-text-group">{{ prompt or 'What challenges did you overcome today?' }}</span></p>
+                </div>
+                <textarea class="reflection-input" placeholder="Write your group reflection here..." id="reflection-input-group"></textarea>
+                <div class="form-options">
+                    <div class="display-option">
+                        <label>Display As:</label>
+                        <select id="display-mode-group" title="Display mode for group reflection">
+                            <option value="named">My Name</option>
+                            <option value="pseudonym">Pseudonym</option>
+                            <option value="anonymous">Anonymous</option>
+                        </select>
+                        <input type="text" id="pseudonym-input-group" placeholder="Choose a pseudonym" style="display: none;">
+                    </div>
+                    <div class="tags-option">
+                        <label>Tags:</label>
+                        <div class="tags-container" id="tags-container-group">
+                            <input type="text" id="tag-input-group" placeholder="Add tag and press Enter">
+                        </div>
+                        <div class="selected-tags" id="selected-tags-group"></div>
+                    </div>
+                </div>
+                <div class="feedback-message" id="feedback-message-group"></div>
+                <button type="button" class="submit-button">
+                    <i class="fas fa-seedling"></i> Plant Group Reflection
+                </button>
+            </div>
+            <div class="group-feed">
+                <h3><i class="fas fa-history"></i> Recent Group Reflections</h3>
+                <div class="reflection-feed">
+                    <!-- Group reflection cards loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- read the user ID from the body attribute in plain JS -->
+    <script>
+        (() => {
+            const id = document.body.dataset.currentUserId;
+            window.currentUserId = id ? Number(id) : null;
+        })();
+    </script>
+
+    <script src="{{ url_for('static', filename='js/journal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Garden | Garden of Growth</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Baloo+2:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body data-current-user-id="{{ current_user.id or '' }}">
+
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">My Garden</h1>
+            <div class="level-badge">Lvl {{ current_user.level }}</div>
+        </div>
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link active"><i class="fas fa-home"></i> My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link"><i class="fas fa-book"></i> Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link"><i class="fas fa-users"></i> Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link"><i class="fas fa-map-marked-alt"></i> Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-container main-container">
+        <div class="user-status-bar">
+            <div class="user-avatar">
+                <img src="{{ url_for('static', filename='Images/avatars/user1.png') }}" alt="User Avatar">
+                <div class="xp-bar">
+                    <div class="xp-progress" style="width: 65%;"></div>
+                </div>
+            </div>
+            <div class="status-items">
+                <div class="status-item">
+                    <i class="fas fa-fire"></i>
+                    <span>7 Day Streak</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-seedling"></i>
+                    <span>12 Plants</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>3 Badges</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="garden-container" id="main-garden">
+            <!-- Rendered by gardenEngine.js -->
+        </div>
+
+        <div class="dashboard-actions">
+            <button type="button" class="action-button reflect-button" data-href="{{ url_for('journal') }}">
+                <i class="fas fa-book"></i> New Reflection
+            </button>
+            <button type="button" class="action-button goals-button" data-href="{{ url_for('pathways') }}">
+                <i class="fas fa-bullseye"></i> View Goals
+            </button>
+            <button type="button" class="action-button greenhouse-button" data-href="{{ url_for('greenhouse') }}">
+                <i class="fas fa-users"></i> Visit Greenhouse
+            </button>
+        </div>
+
+        <div class="recent-activity">
+            <h3><i class="fas fa-history"></i> Recent Growth</h3>
+            <div class="activity-list">
+                {% for activity in recent_activities %}
+                <div class="activity-item">
+                    <i class="fas fa-{{ activity.icon }} activity-icon"></i>
+                    <div class="activity-content">
+                        <p>{{ activity.content }}</p>
+                        <small>{{ activity.time }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <!-- 1) Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <!-- 2) Bootstrap currentUserId -->
+    <script>
+        window.currentUserId = Number(document.body.dataset.currentUserId);
+    </script>
+    <!-- 3) Dashboard logic -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <!-- 4) Garden engine (tree + plants) -->
+    <script src="{{ url_for('static', filename='js/gardenEngine.js') }}"></script>
+    <!-- 5) Animations -->
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

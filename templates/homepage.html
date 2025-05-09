@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden of Growth</title>
+
+    <!-- Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Baloo+2:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body data-current-user-id="{{ current_user.id or '' }}">
+
+    <div class="background-animation">
+        <div class="particles"></div>
+    </div>
+
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">Garden of Growth</h1>
+            <div class="level-badge">BETA</div>
+        </div>
+
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link"><i class="fas fa-home"></i> My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link"><i class="fas fa-book"></i> Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link"><i class="fas fa-users"></i> Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link"><i class="fas fa-map-marked-alt"></i> Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="hero-section">
+        <div class="hero-content">
+            <h2 class="hero-title">Cultivate Your <span class="highlight">Knowledge</span></h2>
+            <p class="hero-subtitle">Every reflection plants a seed. Every goal waters your garden.</p>
+
+            <div class="weather-display" id="weather-theme">
+                <i class="fas fa-sun weather-icon"></i>
+                <span class="weather-text">Sunny Day</span>
+            </div>
+
+            <div class="cta-container">
+                <a href="{{ url_for('dashboard') }}" class="cta-button">
+                    <i class="fas fa-seedling"></i> Enter Your Garden
+                </a>
+                <div class="sparkle-effect"></div>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <div class="garden-preview">
+                <div class="plant plant-1" data-type="flower"></div>
+                <div class="plant plant-2" data-type="shrub"></div>
+                <div class="plant plant-3" data-type="tree"></div>
+                <div class="badge-floating">
+                    <i class="fas fa-medal"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="game-footer">
+        <p>© 2024 Garden of Growth | UNCC Learning Experience</p>
+    </footer>
+
+    <!-- bootstrap currentUserId from data- attribute -->
+    <script>
+        (() => {
+            const id = document.body.dataset.currentUserId;
+            window.currentUserId = id ? Number(id) : null;
+        })();
+    </script>
+
+    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

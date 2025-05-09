@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Garden of Growth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Baloo+2:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--forest-dark), var(--leaf-green));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+            .register-header i {
+                font-size: 3rem;
+                color: var(--golden);
+                margin-bottom: 1rem;
+                animation: float 3s ease-in-out infinite;
+            }
+
+            .register-header h1 {
+                font-family: 'Baloo 2', cursive;
+                color: var(--forest-dark);
+                margin: 0;
+                font-size: 2.5rem;
+            }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: var(--forest-dark);
+                font-weight: 600;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: 2px solid var(--leaf-green);
+                border-radius: 10px;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+                .form-group input:focus {
+                    outline: none;
+                    border-color: var(--golden);
+                    box-shadow: 0 0 0 3px rgba(226, 162, 25, 0.2);
+                }
+
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--forest-dark);
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+            color: #666;
+        }
+
+            .requirement i {
+                margin-right: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .requirement.valid {
+                color: #00aa00;
+            }
+
+                .requirement.valid i {
+                    color: #00aa00;
+                }
+
+        .register-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--golden);
+            color: var(--forest-dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+            .register-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(226, 162, 25, 0.4);
+            }
+
+            .register-button:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--forest-dark);
+        }
+
+            .login-link a {
+                color: var(--golden);
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+            .flashes li {
+                padding: 0.8rem;
+                border-radius: 10px;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+
+        .success {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00aa00;
+            border: 1px solid #00aa00;
+        }
+
+        .floating-plants {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-plant {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+            .floating-plant:nth-child(1) {
+                left: 10%;
+                top: 20%;
+                animation-delay: 0s;
+            }
+
+            .floating-plant:nth-child(2) {
+                left: 80%;
+                top: 40%;
+                animation-delay: 2s;
+            }
+
+            .floating-plant:nth-child(3) {
+                left: 30%;
+                top: 70%;
+                animation-delay: 4s;
+            }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 2.5rem;
+            cursor: pointer;
+            color: var(--forest-dark);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+            .password-toggle:hover {
+                opacity: 1;
+            }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="floating-plants">
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant1.png') }}')"></div>
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant2.png') }}')"></div>
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant3.png') }}')"></div>
+        </div>
+
+        <div class="register-form">
+            <div class="register-header">
+                <i class="fas fa-seedling"></i>
+                <h1>Create Account</h1>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('register') }}" method="post" id="registerForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" required placeholder="Choose a username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required placeholder="Create a password">
+                    <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+
+                    <div class="password-requirements">
+                        <div class="requirement" id="length">
+                            <i class="fas fa-times"></i>
+                            <span>At least 8 characters</span>
+                        </div>
+                        <div class="requirement" id="uppercase">
+                            <i class="fas fa-times"></i>
+                            <span>At least one uppercase letter</span>
+                        </div>
+                        <div class="requirement" id="number">
+                            <i class="fas fa-times"></i>
+                            <span>At least one number</span>
+                        </div>
+                        <div class="requirement" id="special">
+                            <i class="fas fa-times"></i>
+                            <span>At least one special character</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required placeholder="Confirm your password">
+                    <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+                </div>
+
+                <button type="submit" class="register-button" id="submitButton" disabled>
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm_password');
+            const togglePassword = document.getElementById('togglePassword');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const submitButton = document.getElementById('submitButton');
+            const requirements = {
+                length: document.getElementById('length'),
+                uppercase: document.getElementById('uppercase'),
+                number: document.getElementById('number'),
+                special: document.getElementById('special')
+            };
+
+            // Password visibility toggle
+            function togglePasswordVisibility(input, icon) {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            }
+
+            togglePassword.addEventListener('click', () => togglePasswordVisibility(password, togglePassword));
+            toggleConfirmPassword.addEventListener('click', () => togglePasswordVisibility(confirmPassword, toggleConfirmPassword));
+
+            // Password validation
+            function validatePassword() {
+                const value = password.value;
+                const confirmValue = confirmPassword.value;
+                let isValid = true;
+
+                // Check length
+                if (value.length >= 8) {
+                    requirements.length.classList.add('valid');
+                    requirements.length.querySelector('i').className = 'fas fa-check';
+                } else {
+                    requirements.length.classList.remove('valid');
+                    requirements.length.querySelector('i').className = 'fas fa-times';
+                    isValid = false;
+                }
+
+                // Check uppercase
+                if (/[A-Z]/.test(value)) {
+                    requirements.uppercase.classList.add('valid');
+                    requirements.uppercase.querySelector('i').className = 'fas fa-check';
+                } else {
+                    requirements.uppercase.classList.remove('valid');
+                    requirements.uppercase.querySelector('i').className = 'fas fa-times';
+                    isValid = false;
+                }
+
+                // Check number
+                if (/[0-9]/.test(value)) {
+                    requirements.number.classList.add('valid');
+                    requirements.number.querySelector('i').className = 'fas fa-check';
+                } else {
+                    requirements.number.classList.remove('valid');
+                    requirements.number.querySelector('i').className = 'fas fa-times';
+                    isValid = false;
+                }
+
+                // Check special character
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+                    requirements.special.classList.add('valid');
+                    requirements.special.querySelector('i').className = 'fas fa-check';
+                } else {
+                    requirements.special.classList.remove('valid');
+                    requirements.special.querySelector('i').className = 'fas fa-times';
+                    isValid = false;
+                }
+
+                // Check password match
+                if (value !== confirmValue) {
+                    isValid = false;
+                }
+
+                submitButton.disabled = !isValid;
+            }
+
+            password.addEventListener('input', validatePassword);
+            confirmPassword.addEventListener('input', validatePassword);
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

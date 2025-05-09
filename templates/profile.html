@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Garden of Growth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-current-user-id="{{ current_user.id }}">
+    <script>
+        (() => {
+            const id = document.body.dataset.currentUserId;
+            window.currentUserId = id ? Number(id) : null;
+        })();
+    </script>
+
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">My Profile</h1>
+            <div class="level-badge">Lvl {{ user.level }}</div>
+        </div>
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link"><i class="fas fa-home"></i> My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link"><i class="fas fa-book"></i> Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link"><i class="fas fa-users"></i> Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link"><i class="fas fa-map-marked-alt"></i> Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link active"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-container main-container">
+        <section class="profile-header">
+            <div class="avatar-container">
+                <img src="{{ url_for('static', filename='Images/avatars/user1.png') }}" alt="Profile Avatar" class="profile-avatar">
+                <div class="avatar-frame"></div>
+                <div class="level-display">Lvl {{ user.level }}</div>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name">{{ user.username }}</h2>
+                <p class="profile-title">{{ user.title }}</p>
+                <p class="profile-quote">{{ user.quote }}</p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-fire stat-icon"></i>
+                        <span>0 Day Streak</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-seedling stat-icon"></i>
+                        <span>0 XP</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy stat-icon"></i>
+                        <span>Lvl 0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="content-tabs">
+            <button class="tab-button active" data-tab="reflections">Reflections</button>
+            <button class="tab-button" data-tab="badges">Badges</button>
+            <button class="tab-button" data-tab="settings">Settings</button>
+        </div>
+        <div id="reflections-tab" class="tab-content active">
+            <div class="reflection-feed"></div>
+        </div>
+        <div id="badges-tab" class="tab-content">
+            <div class="badges-grid"></div>
+        </div>
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-form">
+                <h3><i class="fas fa-cog"></i> Profile Settings</h3>
+                <div class="form-group">
+                    <label>Profile Picture</label>
+                    <div class="avatar-options">
+                        <div class="avatar-option selected">
+                            <img src="{{ url_for('static', filename='Images/avatars/user1.png') }}" alt="Avatar 1">
+                        </div>
+                        <div class="avatar-option">
+                            <img src="{{ url_for('static', filename='Images/avatars/user2.jpg') }}" alt="Avatar 2">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Pronouns</label>
+                    <input type="text" id="pronouns-input" placeholder="e.g., she/her, they/them" value="{{ user.pronouns or '' }}">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="title-input" value="{{ user.title }}">
+                </div>
+                <div class="form-group">
+                    <label>Personal Quote</label>
+                    <textarea id="quote-input">{{ user.quote }}</textarea>
+                </div>
+                <button class="action-button save-button"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

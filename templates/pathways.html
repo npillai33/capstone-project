@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathways | Garden of Growth</title>
+
+    <!-- Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body data-current-user-id="{{ current_user.id or '' }}">
+
+    <div class="background-animation">
+        <div class="particles"></div>
+    </div>
+
+    <header class="game-header">
+        <div class="logo-container">
+            <i class="fas fa-seedling logo-icon"></i>
+            <h1 class="logo-text">Pathways</h1>
+            <div class="level-badge">My Goals</div>
+        </div>
+        <nav class="game-nav">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}" class="nav-link">My Garden</a></li>
+                <li><a href="{{ url_for('journal') }}" class="nav-link">Journal</a></li>
+                <li><a href="{{ url_for('greenhouse') }}" class="nav-link">Greenhouse</a></li>
+                <li><a href="{{ url_for('pathways') }}" class="nav-link active">Pathways</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="pathways-container">
+        <section class="pathway-visualization">
+            <h2 class="section-header"><i class="fas fa-map-marked-alt"></i> Your Goal Path</h2>
+            <div id="goal-path" class="goal-path">
+                <!-- Dynamic goal nodes will be injected here -->
+            </div>
+        </section>
+
+        <section class="goals-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tasks"></i> Your Goals List</h2>
+                <button class="action-button add-goal-button"><i class="fas fa-plus"></i> Add New Goal</button>
+            </div>
+            <div id="goal-list" class="goal-list">
+                <!-- Goals loaded here -->
+            </div>
+        </section>
+
+        <section class="milestones-section">
+            <h2><i class="fas fa-star"></i> Milestones</h2>
+            <div id="milestone-list" class="milestone-list">
+                <!-- Milestones loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Goal Modal -->
+    <div id="goal-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <h3 id="modal-title">Add New Goal</h3>
+            <form id="goal-form">
+                <div class="form-group">
+                    <label for="goal-title">Goal Title</label>
+                    <input type="text" id="goal-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="goal-description">Description</label>
+                    <textarea id="goal-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="goal-type">Type</label>
+                    <select id="goal-type" required>
+                        <option value="personal">Personal</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+                <div class="form-group" id="group-goal-container" style="display:none;">
+                    <label for="group-goal-select">Group</label>
+                    <select id="group-goal-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="goal-deadline">Deadline</label>
+                    <input type="date" id="goal-deadline">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="action-button save-goal-button">Save Goal</button>
+                    <button type="button" class="action-button cancel-goal-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Read user ID from data- attribute -->
+    <script>
+        (() => {
+            const id = document.body.dataset.currentUserId;
+            window.currentUserId = id ? Number(id) : null;
+        })();
+    </script>
+
+    <!-- Page behavior -->
+    <script src="{{ url_for('static', filename='js/pathways.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

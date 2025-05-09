@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Garden of Growth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='animations.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Baloo+2:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--forest-dark), var(--leaf-green));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+            .login-header i {
+                font-size: 3rem;
+                color: var(--golden);
+                margin-bottom: 1rem;
+                animation: float 3s ease-in-out infinite;
+            }
+
+            .login-header h1 {
+                font-family: 'Baloo 2', cursive;
+                color: var(--forest-dark);
+                margin: 0;
+                font-size: 2.5rem;
+            }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: var(--forest-dark);
+                font-weight: 600;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: 2px solid var(--leaf-green);
+                border-radius: 10px;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+                .form-group input:focus {
+                    outline: none;
+                    border-color: var(--golden);
+                    box-shadow: 0 0 0 3px rgba(226, 162, 25, 0.2);
+                }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--golden);
+            color: var(--forest-dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+            .login-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(226, 162, 25, 0.4);
+            }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--forest-dark);
+        }
+
+            .register-link a {
+                color: var(--golden);
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+                .register-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+            .flashes li {
+                padding: 0.8rem;
+                border-radius: 10px;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+
+        .success {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00aa00;
+            border: 1px solid #00aa00;
+        }
+
+        .floating-plants {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-plant {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+            .floating-plant:nth-child(1) {
+                left: 10%;
+                top: 20%;
+                animation-delay: 0s;
+            }
+
+            .floating-plant:nth-child(2) {
+                left: 80%;
+                top: 40%;
+                animation-delay: 2s;
+            }
+
+            .floating-plant:nth-child(3) {
+                left: 30%;
+                top: 70%;
+                animation-delay: 4s;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="floating-plants">
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant1.png') }}')"></div>
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant2.png') }}')"></div>
+            <div class="floating-plant" style="background-image: url('{{ url_for('static', filename='Images/plants/plant3.png') }}')"></div>
+        </div>
+
+        <div class="login-form">
+            <div class="login-header">
+                <i class="fas fa-seedling"></i>
+                <h1>Welcome Back</h1>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('login') }}" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+
+            <div class="register-link">
+                <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>
